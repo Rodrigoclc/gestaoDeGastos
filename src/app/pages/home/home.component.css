@@ -1,0 +1,34 @@
+
+
+body {
+    background-color: #82928d;
+    margin: auto;
+    border-radius: .5rem;
+    height: 92vh;
+}
+
+.divmaeresultado {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.divResultadoTitulos {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    width: 47%;
+}
+
+.divResultadoValor {
+    display: flex;
+    flex-direction: column;
+}
+
+.corBotao {
+    background-color: #ffffff;
+    color: black;
+    border-radius: 1rem;
+}
+

@@ -1,0 +1,106 @@
+    <div class="col-lg-9 col-12 mx-auto">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white z-index-3 py-3">
+            <div class="container">
+                <a class="navbar-brand" [routerLink]="['/']" rel="tooltip" title="Designed and Coded by Creative Tim"
+                    data-placement="bottom">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <a class="navbar-brand" href="#" rel="tooltip" title="Designed and Coded by Creative Tim"
+                    data-placement="bottom">
+                    Controle financeiro
+                </a>
+                <a class="navbar-brand" href="#" rel="tooltip" title="Designed and Coded by Creative Tim"
+                    data-placement="bottom">
+                    <span class="example-spacer"></span>
+                </a>
+            </div>
+        </nav>
+        <div class="d-flex justify-content-center card card-body mt-4">
+
+            <ul style="margin-bottom: 1.5rem;background-color: #f7f9fa;border-radius: 1rem;padding: .25rem;" class="nav nav-justified">
+                <li class="nav-item">
+                    <a [class.corBotao]="corBotao" class="nav-link active" (click)="mudarRendaDespesa('renda')">
+                        Renda
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a [class.corBotao]="!corBotao" class="nav-link" (click)="mudarRendaDespesa('despesa')">
+                        Despesa
+                    </a>
+                </li>
+            </ul>
+
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample1"
+                aria-expanded="false" aria-controls="collapseExample1">
+                Nova Categoria
+            </button>
+        </div>
+        <div class="collapse" id="collapseExample1">
+            <div class="card card-body mt-4">
+                <label class="form-label">Nome da categoria</label>
+                <input type="text" class="form-control" id="nome-projeto" onfocus="focused(this)"
+                    onfocusout="defocused(this)" [(ngModel)]="inputCategoria">
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" name="button" class="btn btn-light m-0" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample1" aria-expanded="false"
+                        aria-controls="collapseExample1">Cancelar</button>
+                    <button type="submit" name="button" class="btn bg-gradient-primary m-0 ms-2"
+                        data-bs-toggle="collapse" data-bs-target="#collapseExample1" aria-expanded="false"
+                        aria-controls="collapseExample1" (click)="criarCategoria()">Salvar</button>
+                </div>
+            </div>
+        </div>
+        <div class="card card-body mt-4">
+
+
+
+            <div class="accordion-1">
+                <div class="container">
+                    @for (item of listaCategorias; track $index) {
+                    <div class="row">
+                        <div class="col-md-10 mx-auto">
+                            <div class="accordion" id="accordionRental">
+                                <div class="accordion-item mb-3">
+                                    <h5 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button border-bottom font-weight-bold collapsed"
+                                            type="button" data-bs-toggle="collapse"
+                                            [attr.data-bs-target]="'#collapseOne'+$index" aria-expanded="false"
+                                            aria-controls="collapseOne">
+                                            {{ item }}
+                                            <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
+                                                aria-hidden="true"></i>
+                                            <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
+                                                aria-hidden="true"></i>
+                                        </button>
+                                    </h5>
+                                    <div [id]="'collapseOne'+$index" class="accordion-collapse collapse"
+                                        aria-labelledby="headingOne" data-bs-parent="#accordionRental">
+                                        <div class="accordion-body text-sm opacity-8">
+                                            <label class="form-label">Nome da categoria</label>
+                                            <input type="text" class="form-control" id="nome-projeto"
+                                                onfocus="focused(this)" onfocusout="defocused(this)"
+                                                [(ngModel)]="inputCategoria">
+
+                                            <div class="d-flex justify-content-end mt-4">
+                                                <button type="button" name="button" class="btn btn-light m-0"
+                                                    (click)="excluirCategoria(item)" data-bs-toggle="collapse"
+                                                    [attr.data-bs-target]="'#collapseOne'+$index" aria-expanded="false"
+                                                    aria-controls="collapseOne">Excluir</button>
+                                                <button type="submit" name="button"
+                                                    class="btn bg-gradient-primary m-0 ms-2"
+                                                    (click)="editarCategoria(item)" data-bs-toggle="collapse"
+                                                    [attr.data-bs-target]="'#collapseOne'+$index" aria-expanded="false"
+                                                    aria-controls="collapseOne">Salvar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>

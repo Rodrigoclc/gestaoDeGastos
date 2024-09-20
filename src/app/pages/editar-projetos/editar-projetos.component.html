@@ -1,0 +1,147 @@
+<div class="col-lg-9 col-12 mx-auto">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white z-index-3 py-3">
+        <div class="container">
+            <a class="navbar-brand" [routerLink]="['/']" rel="tooltip" title="Designed and Coded by Creative Tim"
+                data-placement="bottom">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <a class="navbar-brand" href="#" rel="tooltip" title="Designed and Coded by Creative Tim"
+                data-placement="bottom">
+                Controle financeiro
+            </a>
+            <a class="navbar-brand" href="#" rel="tooltip" title="Designed and Coded by Creative Tim"
+                data-placement="bottom">
+                <span class="example-spacer"></span>
+            </a>
+        </div>
+    </nav>
+    <p class="d-flex justify-content-center card card-body mt-4">
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample1"
+            aria-expanded="false" aria-controls="collapseExample1" (click)="chamarColapso(-1, false)">
+            Novo Projeto
+        </button>
+    </p>
+    <div class="collapse" id="collapseExample1">
+        <div class="card card-body mt-4">
+            <label class="form-label">Nomo do projeto</label>
+            <input type="text" class="form-control" id="nome-projeto" onfocus="focused(this)"
+                onfocusout="defocused(this)" [(ngModel)]="novoProjeto">
+
+            <label class="form-label">Saldo inicial</label>
+            <input type="number" class="form-control" id="saldo-inicial" onfocus="focused(this)"
+                onfocusout="defocused(this)" [(ngModel)]="saldoInicialProjeto">
+
+            <div class="d-flex justify-content-end mt-4">
+                <button type="button" name="button" class="btn btn-light m-0" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample1" aria-expanded="false"
+                    aria-controls="collapseExample1">Cancelar</button>
+                <button type="submit" name="button" class="btn bg-gradient-primary m-0 ms-2" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1"
+                    (click)="criarProjeto()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="accordion-1">
+            <div class="container">
+                @for (item of listaProjetos; track $index) {
+                <div class="row">
+                    <div class="col-md-10 mx-auto">
+                        <div class="accordion" id="accordionRental">
+                            <div (click)="chamarColapso($index, true)" class="accordion-item mb-3">
+                                <h5 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button border-bottom font-weight-bold collapsed botao-sanfona"
+                                        type="button" data-bs-toggle="collapse"
+                                        [attr.data-bs-target]="'#collapseOne'+$index" aria-expanded="false"
+                                        aria-controls="collapseOne">
+                                        <h6 class="mb-0 text-xs">{{ item.nome }}</h6>
+                                    <p class="text-xs text-secondary mb-0">{{ item.calcularSaldoAtual() }}</p>
+                                        <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
+                                            aria-hidden="true"></i>
+                                        <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
+                                            aria-hidden="true"></i>
+                                    </button>
+                                </h5>
+                                <div [id]="'collapseOne'+$index" class="accordion-collapse collapse"
+                                    aria-labelledby="headingOne" data-bs-parent="#accordionRental">
+                                    <div class="accordion-body text-sm opacity-8">
+                                        <label class="form-label">Nomo do projeto</label>
+                                        <input type="text" class="form-control" id="nome-projeto" onfocus="focused(this)"
+                                            onfocusout="defocused(this)" [(ngModel)]="novoProjeto">
+            
+                                        <label class="form-label">Saldo inicial</label>
+                                        <input type="number" class="form-control" id="saldo-inicial" onfocus="focused(this)"
+                                            onfocusout="defocused(this)" [(ngModel)]="saldoInicialProjeto">
+
+                                        <div class="d-flex justify-content-end mt-4">
+                                            <button type="button" name="button" class="btn btn-light m-0"
+                                                 
+                                                data-bs-toggle="collapse"
+                                                [attr.data-bs-target]="'#collapseOne'+$index" aria-expanded="false"
+                                                aria-controls="collapseOne" (click)="excluir($index)">Excluir</button>
+                                            <button type="submit" name="button"
+                                                class="btn bg-gradient-primary m-0 ms-2"
+                                                data-bs-toggle="collapse"
+                                                [attr.data-bs-target]="'#collapseOne'+$index" aria-expanded="false"
+                                                aria-controls="collapseOne" (click)="atualizarProjeto($index)">Salvar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- <div class="table-responsive">
+            <table class="table align-items-center mb-0">
+                <tbody>
+                    @for ( item of listaProjetos; track $index) {
+                    <tr (click)="chamarColapso($index, true)">
+                        <td data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+$index" aria-expanded="false"
+                            aria-controls="collapseExample">
+                            <div class="d-flex px-2 py-1 cursor-pointer">
+                                <div>
+                                    <img src="https://demos.creative-tim.com/soft-ui-design-system-pro/assets/img/team-2.jpg"
+                                        class="avatar avatar-sm me-3">
+                                </div>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h6 class="mb-0 text-xs">{{ item.nome }}</h6>
+                                    <p class="text-xs text-secondary mb-0">{{ item.calcularSaldoAtual() }}</p>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <div class="collapse" [id]="'collapse'+$index">
+                        <div class="card card-body mt-4">
+                            <label class="form-label">Nomo do projeto</label>
+                            <input type="text" class="form-control" id="nome-projeto" onfocus="focused(this)"
+                                onfocusout="defocused(this)" [(ngModel)]="novoProjeto">
+
+                            <label class="form-label">Saldo inicial</label>
+                            <input type="number" class="form-control" id="saldo-inicial" onfocus="focused(this)"
+                                onfocusout="defocused(this)" [(ngModel)]="saldoInicialProjeto">
+
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="button" name="button" class="btn btn-light m-0" data-bs-toggle="collapse"
+                                    [attr.data-bs-target]="'#collapse'+$index" aria-expanded="false"
+                                    aria-controls="collapseExample" (click)="excluir($index)">Excluir</button>
+                                <button type="submit" name="button" class="btn bg-gradient-primary m-0 ms-2"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseExample1" aria-expanded="false"
+                                    aria-controls="collapseExample1" (click)="atualizarProjeto($index)">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+
+</div>

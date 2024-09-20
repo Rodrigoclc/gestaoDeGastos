@@ -1,0 +1,37 @@
+<div class="col-lg-9 col-12 mx-auto">
+    <form [formGroup]="transacoes" (ngSubmit)="subimtForm()" class="card card-body mt-4">
+    <h1 class="mb-0">{{ titulo }}</h1>
+        <hr class="horizontal dark my-3">
+        <input type="number" class="form-control" id="projectName" onfocus="focused(this)" onfocusout="defocused(this)" formControlName="valor">
+        <div class="form-group">
+            <label for="example-search-input" class="form-control-label">&nbsp;</label>
+            <select class="form-control" formControlName="categoria">
+                @for (opcao of categorias; track opcao) {
+                    <option [value]="opcao">{{ opcao }}</option>
+                }                                            
+            </select>
+        </div>
+        <input type="text" class="form-control" id="projectName" onfocus="focused(this)" onfocusout="defocused(this)" formControlName="descricao">
+        
+        <div class="row">
+            <div class="col-6">
+                <label class="form-label">Data</label>
+                <input class="form-control datetimepicker flatpickr-input" type="date"
+                    placeholder="Please select start date" data-input="" onfocus="focused(this)"
+                    onfocusout="defocused(this)" 
+                    formControlName="data">
+            </div>
+            <div class="col-6">
+                <label class="form-label">Hora</label>
+                <input class="form-control datetimepicker flatpickr-input" type="time"
+                    placeholder="Please select end date" data-input="" onfocus="focused(this)"
+                    onfocusout="defocused(this)"
+                    formControlName="hora">
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-4">
+            <button type="button" name="button" class="btn btn-light m-0" [routerLink]="['']">Cancelar</button>
+            <button type="submit" name="button" class="btn bg-gradient-primary m-0 ms-2">Salvar</button>
+        </div>
+    </form>
+</div>
