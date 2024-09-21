@@ -2,6 +2,8 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Transacao } from '../../../interfaces/iProjeto';
 import { RouterLink } from '@angular/router';
+import { CategoriaService } from '../../../services/categoria.service';
+import { ICategoria } from '../../../interfaces/IDbInterface';
 
 @Component({
   selector: 'app-transacao',
@@ -22,9 +24,9 @@ export class TransacaoComponent implements OnInit {
   select!: string;
 
   @Input()titulo: string = '';
-  @Input()categorias: string[] = [];
+  @Input()categorias!: string;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private categoriaService: CategoriaService) { }
 
   ngOnInit(): void {
     this.transacoes = this.formBuilder.group({
@@ -34,6 +36,17 @@ export class TransacaoComponent implements OnInit {
       data: [this.obterDataAtualFormatada(),[Validators.required]],
       hora: [this.obterHoraAtual(),[Validators.required]]
     })
+    this.obterCategorias();
+  }
+
+  obterCategorias() {
+    this.categoriaService.getAllCategorias(this.categorias).snapshotChanges().subscribe((data) => {
+      data.forEach((item) => {
+        let retornoCategorias: ICategoria = item.payload.toJSON()! as ICategoria;
+        let chave: string = item.key!;
+        console.log(retornoCategorias);
+      });
+    });
   }
 
    private obterHoraAtual(): string {

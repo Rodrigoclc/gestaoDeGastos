@@ -1,0 +1,45 @@
+{
+    "transacoes": {
+        "idTransacao": "",
+        "idProjeto": "",
+        "idUsuario": "",
+        "categoria": "",
+        "data": "",
+        "descricao": "",
+        "hora": "",
+        "tipo": "",
+        "valor": 0,
+        "ativo": true
+    },
+    "categoriasRenda": {
+        "idCategoria": "",
+        "idProjeto": "",
+        "idUsuario": "",
+        "nomeCategoria": "",
+        "ativo": true
+    },
+    "categoriasDespesas": {
+        "idCategoria": "",
+        "idProjeto": "",
+        "idUsuario": "",
+        "nomeCategoria": "",
+        "ativo": true
+    },
+    "projetos": {
+        "idProjeto": "",
+        "idUsuario": "",
+        "nomeProjeto": "",
+        "saldoInicial": 0,
+        "ativo": true
+    },
+    "usuarios": {
+        "idUsuario": "",
+        "nomeUsuario": "",
+        "fotoUsuario": ""
+    },
+    "ultimoProjeto": {
+        "idUltimoProjeto": "",
+        "idUsuario": "",
+        "ultimoProjeto": ""
+    }
+}

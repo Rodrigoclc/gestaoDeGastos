@@ -1,20 +1,30 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList, PathReference } from '@angular/fire/compat/database';
-import { Transacao } from '../interfaces/iProjeto';
-import { map } from 'rxjs';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
+import { IProjeto, IUltimoProjeto } from '../interfaces/IDbInterface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CrudService {
+export class ProjetoService {
 
-  transacoesRef!: AngularFireList<any>
+  projetosRef!: AngularFireList<any>
 
   constructor(private db: AngularFireDatabase) {}
 
-  getAllTransacoes() {
-    this.transacoesRef = this.db.list('transacoes');
-    return this.transacoesRef;
+  getAllProjetos() {
+    this.projetosRef = this.db.list('projetos');
+    return this.projetosRef;
+  }
+
+  getUltimoProjetoSelecionado() {
+    this.projetosRef = this.db.list('ultimoProjeto');
+    return this.projetosRef;
+  }
+
+  atualizarRegistroDoUltomoProjetoSelecionado(chave: string, ultimoProjeto: IUltimoProjeto) {
+    console.log(ultimoProjeto);
+  this.projetosRef = this.db.list('ultimoProjeto');
+    this.projetosRef.update(chave, ultimoProjeto);
   }
 
   // getTransacao(dbPath: string, chave: string) {
@@ -22,10 +32,10 @@ export class CrudService {
   //   return this.db.object(`${dbPath}/${chave}`);
   // }
 
-  adicionarTransacao(dbPath: string, transacao: Transacao) {
-  this.transacoesRef = this.db.list(dbPath);
-    this.transacoesRef.push(transacao);
-  }
+  // adicionarTransacao(dbPath: string, transacao: IProjeto) {
+  // this.projetosRef = this.db.list(dbPath);
+  //   this.projetosRef.push(transacao);
+  // }
 
   // atualizarTransacao(dbPath: string, chave: string, transacao: Transacao) {
   // this.transacoesRef = this.db.list(dbPath);

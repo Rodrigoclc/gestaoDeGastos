@@ -20,7 +20,7 @@ export class AdicionarDespesaComponent implements OnInit {
 
   listaProjetos!: Projeto[];
   ultimoProjeto!: string;
-  listaCategorias!: string[];
+  categoria: string = 'despesa';
 
   constructor(
     private projetosService: CreatePojectService, 
@@ -29,9 +29,9 @@ export class AdicionarDespesaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.ultimoProjeto = this.projetosService.buscarUltimoProjetoSelecionado();
-    this.listaProjetos = this.projetosService.recuperarProjetos();
-    this.listaCategorias = this.categorias.buscarCategoriasDespesa();
+    // this.ultimoProjeto = this.projetosService.buscarUltimoProjetoSelecionado();
+    // this.listaProjetos = this.projetosService.recuperarProjetos();
+    //his.listaCategorias = this.categorias.buscarCategoriasDespesa();
   }
 
   receberDados(dados: Transacao) {

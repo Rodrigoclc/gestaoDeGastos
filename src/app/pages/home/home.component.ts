@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../material/material.module';
-import { CreatePojectService } from '../../services/projetos.service';
 import { Projeto, RetornoTransacao, Transacao } from '../../interfaces/iProjeto';
+import { ITransacao } from '../../interfaces/ITransacaoInterface'
 import { RouterLink } from '@angular/router';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../shared/components/header/header.component'
-import { CategoriasService } from '../../services/categorias.service';
 import { CommonModule } from '@angular/common';
 import { EditarProjetosComponent } from '../../pages/editar-projetos/editar-projetos.component'
 import { AuthService } from '../../services/auth.service';
 import { RendaDespesaComponent } from '../../shared/components/renda-despesa/renda-despesa.component';
 import { CrudService } from '../../services/crud.service';
+import { ProjetoService } from '../../services/projeto.service';
+import { IProjeto, IUltimoProjeto } from '../../interfaces/IDbInterface';
 
 
 @Component({
@@ -29,7 +30,7 @@ import { CrudService } from '../../services/crud.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  primeirosOptions!: string[];
+  primeirosOptions!: IProjeto[];
   opcaoSelecionada!: string;
   despesaRenda: string = 'Despesa';
   saldoInicial!: number;
@@ -38,102 +39,124 @@ export class HomeComponent implements OnInit {
   saldoFinal!: number;
   listaCategorias!: string[];
   detalhesPorCategoria: Transacao[] = [];
-  listaProjetos!: Projeto[];
+  listaTransacoes!: ITransacao[];
   teste: number = 100;
   corBotao: boolean = true;
-
+  ultimoProjetoSelecionado!: IUltimoProjeto;
 
   constructor(
-    private createPojectService: CreatePojectService,
-    private categoriasService: CategoriasService,
-    private authService: AuthService,
-    private crudService: CrudService
+    private crudService: CrudService,
+    private projetoService: ProjetoService
   ) { }
 
   ngOnInit(): void {
-
-    this.carregarProjetos(this.createPojectService.consultarProjetosLocalStorage())
-    this.primeirosOptions = ((localStorage.getItem('projetosSelect'))?.slice(2, -2))!.split('","');
-    this.opcaoSelecionada = this.createPojectService.buscarUltimoProjetoSelecionado();
-    this.listaCategorias = this.categoriasService.buscarCategoriasRenda();
-    this.mostrarResultados();
+    this.obterUltimoProjetoSelecionado();
+    this.primeirosOptions = this.obterNomesDosProjetos();
+    this.obterTransacoesRendaOuDespesa();
   }
 
-  carregarProjetos(teste: boolean): void {
-    if (teste === false) {
-      this.listaProjetos = this.createPojectService.criarProjetosDefault();
-    } else {
-      this.listaProjetos = this.createPojectService.recuperarProjetos();
-    }
+  obterUltimoProjetoSelecionado() {
+    this.projetoService.getUltimoProjetoSelecionado().snapshotChanges().subscribe((data) => {
+      data.forEach((item) => {
+        let retornoProjetos: IUltimoProjeto = item.payload.toJSON()! as IUltimoProjeto;
+        let chave: string = item.key!;
+        let objeto: IUltimoProjeto = {
+          idUltimoProjeto: chave,
+          idUsuario: retornoProjetos.idUsuario,
+          ultimoProjeto: retornoProjetos.ultimoProjeto
+        }
+        this.ultimoProjetoSelecionado = objeto;
+        this.opcaoSelecionada = objeto.ultimoProjeto;
+      });
+    });
+  }
+
+  obterNomesDosProjetos(): IProjeto[] {
+    let listaOptions: IProjeto[] = [];
+    this.projetoService.getAllProjetos().snapshotChanges().subscribe((data) => {
+      data.forEach((item) => {
+        let retornoProjetos: IProjeto = item.payload.toJSON()! as IProjeto;
+        let chave: string = item.key!;
+
+        let objeto: IProjeto = {
+          idProjeto: chave,
+          idUsuario: retornoProjetos.idUsuario,
+          nomeProjeto: retornoProjetos.nomeProjeto,
+          saldoInicial: retornoProjetos.saldoInicial,
+          ativo: retornoProjetos.ativo
+        }
+        listaOptions.push(objeto);
+        
+      });
+    });
+
+    return listaOptions;
   }
 
   salvarProjetoSelecionado() {
-    localStorage.setItem('ultimoProjeto', this.opcaoSelecionada);
-    this.mostrarResultados();
+    console.log(this.opcaoSelecionada);
+    this.ultimoProjetoSelecionado.ultimoProjeto = this.opcaoSelecionada;
+    this.projetoService.atualizarRegistroDoUltomoProjetoSelecionado(this.ultimoProjetoSelecionado.idUltimoProjeto, this.ultimoProjetoSelecionado);
   }
 
-  mostrarResultados() {
-    const projeto = (this.listaProjetos.find(objeto => objeto.nome == this.opcaoSelecionada));
-    this.saldoInicial = (projeto!.mostrarSaldoinicial());
-    this.renda = (projeto!.mostrarTotalRenda());
-    this.despesa = (projeto!.mostrarTotalDespesa());
-    this.saldoFinal = (projeto!.calcularSaldoAtual());
-    this.mostrarValoresPorCategoria('renda');
+  mostrarValoresPorCategoria(rendaDespesa: string) {
+    this.corBotao = rendaDespesa == 'renda'? true : false;
+    let categoriasAgrupadas = {
+      categoria: '',
+      valor: 0
+    }
+    let listaCategoriasAgrupadas: any[] = [];
+    for(let transacao of this.listaTransacoes) {
+      if (transacao.tipo == rendaDespesa) {
+        categoriasAgrupadas.categoria = transacao.categoria;
+        categoriasAgrupadas.valor = transacao.valor;
+        listaCategoriasAgrupadas.push(categoriasAgrupadas);
+      }
+    };
+    this.detalhesPorCategoria = listaCategoriasAgrupadas
   }
 
-  //resolver o problema desse if pra não repetir o codigo.
-  mostrarValoresPorCategoria(rendaDespesa: string): void {
+  obterTransacoesRendaOuDespesa(): void {
 
-    const lista: RetornoTransacao[] = [];
-    this.crudService.getAllRendas(rendaDespesa).snapshotChanges().subscribe((data) => {
-
+    const lista: ITransacao[] = [];
+    this.crudService.getAllTransacoes().snapshotChanges().subscribe((data) => {
       
       data.forEach((item) => {
-        let transacao: object = item.payload.toJSON()!;
+
+        let transacoes: ITransacao = item.payload.toJSON()! as ITransacao;
         let chave: string = item.key!
-        let objeto = {
-          chave: chave,
-          transacao
+
+        let transacao: ITransacao = {
+          id: chave,
+          valor: transacoes.valor,
+          categoria: transacoes.categoria,
+          descricao: transacoes.descricao,
+          data: transacoes.data,
+          hora: transacoes.hora,
+          tipo: transacoes.tipo
         }
-        lista.push(objeto);        
+
+        lista.push(transacao);
+
+      });
+
+      this.listaTransacoes = lista;
+
+      let despesas = 0;
+      let rendas = 0;
+  
+      this.listaTransacoes.forEach((item) => {
+        if(item.tipo == 'renda') {
+          rendas += item.valor;
+        } else {
+          despesas += item.valor;
+        }
       });
       
+      this.renda = rendas;
+      this.despesa = despesas;
+      this.saldoFinal = this.renda - this.despesa;
+      this.saldoInicial = (this.primeirosOptions.find((x) => x.nomeProjeto == this.opcaoSelecionada)!.saldoInicial); //calcula o saldo inicial
     });
-    console.log(lista);
-
-    const projeto: Projeto = (this.listaProjetos.find(objeto => objeto.nome == this.opcaoSelecionada))!;
-    const listaCategoriasAgrupadas: Transacao[] = [];
-    if (rendaDespesa === 'renda') {
-      this.corBotao = true;
-      const categoriasAgrupadas = projeto['renda'].reduce((agrupado: any, item: any) => {
-        const { categoria, valor } = item;
-        if (!agrupado[categoria]) {
-          agrupado[categoria] = { categoria, valor: 0 };
-        }
-        agrupado[categoria].valor += valor;
-        return agrupado;
-      }, {});
-
-      for (let item in categoriasAgrupadas) {
-        listaCategoriasAgrupadas.push(categoriasAgrupadas[item]);
-      }
-    } else {
-      this.corBotao = false;
-      const categoriasAgrupadas = projeto['despesa'].reduce((agrupado: any, item: any) => {
-        const { categoria, valor } = item;
-        if (!agrupado[categoria]) {
-          agrupado[categoria] = { categoria, valor: 0 };
-        }
-        agrupado[categoria].valor += valor;
-        return agrupado;
-      }, {});
-
-      for (let item in categoriasAgrupadas) {
-        listaCategoriasAgrupadas.push(categoriasAgrupadas[item]);
-      }
-    }
-
-    this.detalhesPorCategoria = listaCategoriasAgrupadas;
-
   }
 }

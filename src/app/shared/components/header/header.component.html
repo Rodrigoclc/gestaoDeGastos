@@ -6,7 +6,7 @@
         <span class="navbar-brand">
             Controle financeiro
         </span>
-        <a [routerLink]="['/login']" class="navbar-brand">
+        <a (click)="signOut()" style="cursor: pointer;" class="navbar-brand">
             <i class="fas fa-user"></i>
         </a>
     </div>

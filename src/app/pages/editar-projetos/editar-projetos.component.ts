@@ -23,28 +23,28 @@ export class EditarProjetosComponent {
   saldoInicialProjeto!: number;
   projetoSelecionado!: Projeto;
 
-  constructor(
-    private projetosSevices: CreatePojectService,
-    private formBuilder: FormBuilder) { }
+  // constructor(
+  //   private projetosSevices: CreatePojectService,
+  //   private formBuilder: FormBuilder) { }
 
-  ngOnInit(): void {
-    this.listaProjetos = this.projetosSevices.recuperarProjetos();
-  }
+  // ngOnInit(): void {
+  //   this.listaProjetos = this.projetosSevices.recuperarProjetos();
+  // }
 
   selecionar(): void {
-    localStorage.setItem('ultimoProjeto', this.projetoSelecionado.nome);
+  //   localStorage.setItem('ultimoProjeto', this.projetoSelecionado.nome);
   }
 
   excluir(index: number): void {
-    this.projetosSevices.excluirProjeto(this.listaProjetos[index].nome);
-    this.listaProjetos = this.projetosSevices.recuperarProjetos();
+  //   this.projetosSevices.excluirProjeto(this.listaProjetos[index].nome);
+  //   this.listaProjetos = this.projetosSevices.recuperarProjetos();
   }
 
   criarProjeto(): void {
-    console.log(this.novoProjeto, this.saldoInicialProjeto)
-    if(!this.saldoInicialProjeto) this.saldoInicialProjeto = 0;
-    this.projetosSevices.criarNovosProjetos(this.novoProjeto, this.saldoInicialProjeto);
-    this.listaProjetos = this.projetosSevices.recuperarProjetos();
+  //   console.log(this.novoProjeto, this.saldoInicialProjeto)
+  //   if(!this.saldoInicialProjeto) this.saldoInicialProjeto = 0;
+  //   this.projetosSevices.criarNovosProjetos(this.novoProjeto, this.saldoInicialProjeto);
+  //   this.listaProjetos = this.projetosSevices.recuperarProjetos();
   }
 
   chamarColapso(index: number, criarEditar: boolean): void {
@@ -59,9 +59,9 @@ export class EditarProjetosComponent {
   }
 
   atualizarProjeto(index: number): void {
-    if(!this.saldoInicialProjeto) this.saldoInicialProjeto = 0;
-    this.projetosSevices.atualizarProjeto(this.listaProjetos[index].nome, this.novoProjeto, this.saldoInicialProjeto);
-    this.listaProjetos = this.projetosSevices.recuperarProjetos();
+  //   if(!this.saldoInicialProjeto) this.saldoInicialProjeto = 0;
+  //   this.projetosSevices.atualizarProjeto(this.listaProjetos[index].nome, this.novoProjeto, this.saldoInicialProjeto);
+  //   this.listaProjetos = this.projetosSevices.recuperarProjetos();
   }
 
   // criarNovoProjetoOuAtualizar(atualizarEditar: string): void {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Projeto, Transacao } from '../interfaces/iProjeto';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,11 @@ export class CreatePojectService {
   listaProjetos!: Projeto[];
   options!: string[];
 
-  constructor() {
-    this.options = JSON.parse(localStorage.getItem('projetosSelect')!);
+  projetosRef!: AngularFireList<any>
+  dbPath: string = '/nome-projetos'
+
+  constructor(private db: AngularFireDatabase) {
+    //this.options = JSON.parse(localStorage.getItem('projetosSelect')!);
   }
 
   consultarProjetosLocalStorage(): boolean {
@@ -21,19 +25,19 @@ export class CreatePojectService {
     return (!!localStorage.getItem('projetosSelect'));
   }
 
-  criarProjetosDefault(): Projeto[] {    
+  criarProjetosDefault() {  //tipar o retorno  
     this.options  = ['Projeto 1', 'Projeto 2', 'Projeto 3'];
     localStorage.setItem('projetosSelect', JSON.stringify(this.options));
     const listaProjetos: Projeto[] = [];
     for (let i of this.options) {
 
       const nomePorjeto: Projeto = new Projeto(i, 0, [], []);
-      listaProjetos.push(nomePorjeto);
+      this.projetosRef.push(nomePorjeto);
     }
     localStorage.setItem('projetos', JSON.stringify(listaProjetos));
     localStorage.setItem('ultimoProjeto', 'Projeto 1');
     this.listaProjetos = listaProjetos;
-    return listaProjetos;
+    return this.projetosRef;
   }
 
   criarNovosProjetos(nomeProjeto: string, saldoInicial: number): void {

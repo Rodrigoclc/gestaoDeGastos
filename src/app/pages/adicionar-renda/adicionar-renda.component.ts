@@ -18,7 +18,7 @@ export class AdicionarRendaComponent {
 
   listaProjetos!: Projeto[];
   ultimoProjeto!: string;
-  listaCategorias!: string[];
+  Categoria: string = 'renda';
 
   tituloHeader: string = 'Adicionar renda';
 
@@ -29,9 +29,9 @@ export class AdicionarRendaComponent {
   ) { }
 
   ngOnInit(): void {
-    this.ultimoProjeto = this.projetoSevice.buscarUltimoProjetoSelecionado();
-    this.listaProjetos = this.projetoSevice.recuperarProjetos();
-    this.listaCategorias = this.categorias.buscarCategoriasRenda();
+    // this.ultimoProjeto = this.projetoSevice.buscarUltimoProjetoSelecionado();
+    // this.listaProjetos = this.projetoSevice.recuperarProjetos();
+    //this.listaCategorias = this.categorias.buscarCategoriasRenda();
   }
 
   receberDados(dados: Transacao) {

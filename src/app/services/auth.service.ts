@@ -24,7 +24,6 @@ export class AuthService {
 
       const credencial = await this.auth.signInWithEmailAndPassword(email, senha);
       this.user = credencial.user!.multiFactor;
-      this.setUserSubject(this.user);
       this.router.navigate(['/']);
       return credencial.user!.multiFactor;
             
@@ -52,11 +51,12 @@ export class AuthService {
   async signOut() {
     await this.auth.signOut();
     this.user = null;
+    this.router.navigate(['/login']);
   }
 
-  private setUserSubject(user: any) {
-    sessionStorage.setItem('user', btoa(JSON.stringify(user.user.email)));
-    sessionStorage.setItem('token', btoa(JSON.stringify(user.user.accessToken)));
-    this.userSubject.next(user);
-  }
+  // private setUserSubject(user: any) {
+  //   sessionStorage.setItem('user', btoa(JSON.stringify(user.user.email)));
+  //   sessionStorage.setItem('token', btoa(JSON.stringify(user.user.accessToken)));
+  //   this.userSubject.next(user);
+  // }
 }

@@ -1,7 +1,7 @@
-<body class="g-sidenav-show   bg-gray-100">
+<div class="g-sidenav-show   bg-gray-100">
     <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript> -->
-    <main class="main-content position-relative border-radius-lg ">
+    <div class="main-content position-relative border-radius-lg ">
         <app-header></app-header>
         <div class="card card-body mt-4">
             <div class="row mt-4">
@@ -9,7 +9,7 @@
                     <label for="example-search-input" class="form-control-label">&nbsp;</label>
                     <select class="form-control" [(ngModel)]="opcaoSelecionada" (change)="salvarProjetoSelecionado()">
                         @for (opcao of primeirosOptions; track opcao) {
-                        <option [value]="opcao">{{ opcao }}</option>
+                        <option [value]="opcao.nomeProjeto">{{ opcao.nomeProjeto }}</option>
                         }
                     </select>
                 </div>
@@ -37,12 +37,12 @@
 
             <ul style="margin-bottom: 1.5rem;background-color: #f7f9fa;border-radius: 1rem;padding: .25rem;" class="nav nav-justified">
                 <li class="nav-item">
-                    <a [class.corBotao]="corBotao" class="nav-link active" (click)="mostrarValoresPorCategoria('renda')">
+                    <a [class.corBotao]="corBotao" (click)="mostrarValoresPorCategoria('renda')" class="nav-link active" >
                         Renda
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a [class.corBotao]="!corBotao" class="nav-link" (click)="mostrarValoresPorCategoria('despesa')">
+                    <a [class.corBotao]="!corBotao" (click)="mostrarValoresPorCategoria('despesa')" class="nav-link" >
                         Despesa
                     </a>
                 </li>
@@ -105,5 +105,5 @@
                 </div>
             </div>
         </div>
-    </main>
-</body>
+    </div>
+</div>
