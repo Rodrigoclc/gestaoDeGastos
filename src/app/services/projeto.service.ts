@@ -22,8 +22,7 @@ export class ProjetoService {
   }
 
   atualizarRegistroDoUltomoProjetoSelecionado(chave: string, ultimoProjeto: IUltimoProjeto) {
-    console.log(ultimoProjeto);
-  this.projetosRef = this.db.list('ultimoProjeto');
+    this.projetosRef = this.db.list('ultimoProjeto');
     this.projetosRef.update(chave, ultimoProjeto);
   }
 

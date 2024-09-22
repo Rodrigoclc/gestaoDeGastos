@@ -41,7 +41,6 @@ export class EditarProjetosComponent {
   }
 
   criarProjeto(): void {
-  //   console.log(this.novoProjeto, this.saldoInicialProjeto)
   //   if(!this.saldoInicialProjeto) this.saldoInicialProjeto = 0;
   //   this.projetosSevices.criarNovosProjetos(this.novoProjeto, this.saldoInicialProjeto);
   //   this.listaProjetos = this.projetosSevices.recuperarProjetos();

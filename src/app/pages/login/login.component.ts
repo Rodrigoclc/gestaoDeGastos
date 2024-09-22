@@ -42,16 +42,12 @@ export class LoginComponent implements OnInit {
 
   submitForm(): void {
     this.initRequest = true;
-    this.authService.login(this.loginUsuario.value.email, this.loginUsuario.value.senha).then((retorno) => {
-      console.log(retorno);
-      this.initRequest = false;
-    });
+    this.authService.login(this.loginUsuario.value.email, this.loginUsuario.value.senha)
+    .then(() => this.initRequest = false);
   }
 
   googleSignIn() {
-    this.authService.googleSignin().then((retorno) => {
-      console.log(retorno);
-    });
+    this.authService.googleSignin();
   }
 
 }

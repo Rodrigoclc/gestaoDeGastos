@@ -94,7 +94,6 @@ export class HomeComponent implements OnInit {
   }
 
   salvarProjetoSelecionado() {
-    console.log(this.opcaoSelecionada);
     this.ultimoProjetoSelecionado.ultimoProjeto = this.opcaoSelecionada;
     this.projetoService.atualizarRegistroDoUltomoProjetoSelecionado(this.ultimoProjetoSelecionado.idUltimoProjeto, this.ultimoProjetoSelecionado);
   }

@@ -44,7 +44,6 @@ export class TransacaoComponent implements OnInit {
       data.forEach((item) => {
         let retornoCategorias: ICategoria = item.payload.toJSON()! as ICategoria;
         let chave: string = item.key!;
-        console.log(retornoCategorias);
       });
     });
   }
@@ -69,7 +68,6 @@ export class TransacaoComponent implements OnInit {
   }
 
   subimtForm() {
-    console.log(this.transacoes.value);
     this.dadosEnviados.emit(this.transacoes.value);
     this.transacoes.patchValue({valor: '', descricao: ''});
   }

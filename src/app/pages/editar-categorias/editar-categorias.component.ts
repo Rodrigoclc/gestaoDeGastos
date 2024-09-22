@@ -30,7 +30,6 @@ export class EditarCategoriasComponent implements OnInit {
     this.categoriasDespesa = this.categoriasService.buscarCategoriasDespesa();
     this.listaCategorias = this.categoriasRenda;
     this.rendaDespesa = 'renda';
-    console.log(this.categoriasDespesa, this.categoriasRenda)
   }
 
   excluirCategoria(categoria: string) {

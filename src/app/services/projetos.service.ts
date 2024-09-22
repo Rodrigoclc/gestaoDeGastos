@@ -42,10 +42,8 @@ export class CreatePojectService {
 
   criarNovosProjetos(nomeProjeto: string, saldoInicial: number): void {
     
-    console.log(this.listaProjetos)
     const projeto: Projeto = new Projeto(nomeProjeto, saldoInicial, [], []);
     this.listaProjetos.push(projeto);
-    console.log(projeto)
     this.options.push(nomeProjeto);
     localStorage.setItem('ultimoProjeto', nomeProjeto);
     localStorage.setItem('projetos', JSON.stringify(this.listaProjetos));
