@@ -23,7 +23,7 @@ export class AdicionarRendaComponent {
   tituloHeader: string = 'Adicionar renda';
 
   constructor(
-    private projetoSevice: CreatePojectService,
+    //private projetoSevice: CreatePojectService,
     private categorias: CategoriasService,
     private crudService: CrudService
   ) { }

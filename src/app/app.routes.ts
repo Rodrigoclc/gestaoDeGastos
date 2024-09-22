@@ -8,18 +8,19 @@ import { AdicionarRendaComponent } from './pages/adicionar-renda/adicionar-renda
 import { EditarCategoriasComponent } from './pages/editar-categorias/editar-categorias.component';
 import { EditarProjetosComponent } from './pages/editar-projetos/editar-projetos.component';
 import { LoginComponent } from './pages/login/login.component';
+import { authGuard } from './shared/auth.guard';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { 
         path: '', component: MainComponent,
         children: [
-            { path: '', component: HomeComponent },
-            { path: '', component: AdicionarDespesaComponent }
+            { path: '', component: HomeComponent, canActivate: [authGuard] },
+            { path: '', component: AdicionarDespesaComponent, canActivate: [authGuard] }
         ]
     },
-    { path: 'adicionar-despesa', component: AdicionarDespesaComponent },
-    { path: 'adicionar-renda', component: AdicionarRendaComponent},
-    { path: 'editar-cateforias', component: EditarCategoriasComponent },
-    { path: 'editar-projetos', component: EditarProjetosComponent }
+    { path: 'adicionar-despesa', component: AdicionarDespesaComponent, canActivate: [authGuard] },
+    { path: 'adicionar-renda', component: AdicionarRendaComponent, canActivate: [authGuard] },
+    { path: 'editar-cateforias', component: EditarCategoriasComponent, canActivate: [authGuard] },
+    { path: 'editar-projetos', component: EditarProjetosComponent, canActivate: [authGuard] }
 ];

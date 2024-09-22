@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, take } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app'
 import { Router } from '@angular/router';
@@ -17,7 +17,22 @@ export class AuthService {
   constructor(
     private auth: AngularFireAuth,
     private router: Router
-  ) { }
+  ) {}
+
+  authGuard() {
+    return this.auth.user.pipe(  
+
+      map(user => {
+        if (user) {
+          return true;
+        } else {
+          this.router.navigate(['/login']);
+          return false;
+        }
+      }),
+      take(1)
+    );
+  }
 
   async login(email: string, senha: string): Promise<any> {
     try {
