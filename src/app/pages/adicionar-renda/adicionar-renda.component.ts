@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { TransacaoComponent } from '../../shared/components/transacao/transacao.component';
-import { CreatePojectService } from '../../services/projetos.service';
-import { CategoriasService } from '../../services/categorias.service';
 import { Projeto, Transacao } from '../../interfaces/iProjeto';
 import { CrudService } from '../../services/crud.service';
 import { ProjetoService } from '../../services/projeto.service';

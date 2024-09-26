@@ -1,5 +1,4 @@
 import { Component, } from '@angular/core';
-import { CreatePojectService } from '../../services/projetos.service';
 import { Projeto } from '../../interfaces/iProjeto';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../shared/components/header/header.component';

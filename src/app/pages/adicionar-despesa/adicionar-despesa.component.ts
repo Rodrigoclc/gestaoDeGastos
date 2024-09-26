@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TransacaoComponent } from '../../shared/components/transacao/transacao.component';
 import { Projeto, Transacao } from '../../interfaces/iProjeto';
-import { CreatePojectService } from '../../services/projetos.service';
 import { CrudService } from '../../services/crud.service';
 import { ITransacao, IUltimoProjeto } from '../../interfaces/IDbInterface';
 import { ProjetoService } from '../../services/projeto.service';
