@@ -19,26 +19,12 @@ export class AuthService {
     private router: Router
   ) {}
 
-  authGuard() {
-    return this.auth.user.pipe(  
-
-      map(user => {
-        if (user) {
-          return true;
-        } else {
-          this.router.navigate(['/login']);
-          return false;
-        }
-      }),
-      take(1)
-    );
-  }
-
   async login(email: string, senha: string): Promise<any> {
     try {
 
       const credencial = await this.auth.signInWithEmailAndPassword(email, senha);
       this.user = credencial.user!.multiFactor;
+      localStorage.setItem('userUid', JSON.stringify(this.user.user.uid));
       this.router.navigate(['/']);
       return credencial.user!.multiFactor;
             
@@ -54,6 +40,7 @@ export class AuthService {
       const provider = new firebase.auth.GoogleAuthProvider();
       const credential = await this.auth.signInWithPopup(provider);
       this.user = credential.user;
+      localStorage.setItem('userUid', JSON.stringify(this.user.uid));
       this.router.navigate(['/']);
       return credential.user!.multiFactor;
 
@@ -66,12 +53,7 @@ export class AuthService {
   async signOut() {
     await this.auth.signOut();
     this.user = null;
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
-
-  // private setUserSubject(user: any) {
-  //   sessionStorage.setItem('user', btoa(JSON.stringify(user.user.email)));
-  //   sessionStorage.setItem('token', btoa(JSON.stringify(user.user.accessToken)));
-  //   this.userSubject.next(user);
-  // }
 }

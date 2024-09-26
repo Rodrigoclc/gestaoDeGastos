@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { Transacao } from '../../../interfaces/iProjeto';
 import { RouterLink } from '@angular/router';
 import { CategoriaService } from '../../../services/categoria.service';
-import { ICategoria } from '../../../interfaces/IDbInterface';
+import { ICategoria, ITransacao } from '../../../interfaces/IDbInterface';
 
 @Component({
   selector: 'app-transacao',
@@ -18,13 +18,14 @@ import { ICategoria } from '../../../interfaces/IDbInterface';
 })
 export class TransacaoComponent implements OnInit {
 
-  @Output() dadosEnviados = new EventEmitter<Transacao>();
+  @Output() dadosEnviados = new EventEmitter<ITransacao>();
 
   transacoes!: FormGroup;
   select!: string;
+  categorias: string[] = [];
 
   @Input()titulo: string = '';
-  @Input()categorias!: string;
+  @Input()categoria!: string;
 
   constructor(private formBuilder: FormBuilder, private categoriaService: CategoriaService) { }
 
@@ -40,10 +41,11 @@ export class TransacaoComponent implements OnInit {
   }
 
   obterCategorias() {
-    this.categoriaService.getAllCategorias(this.categorias).snapshotChanges().subscribe((data) => {
+    this.categoriaService.getAllCategorias(this.categoria).subscribe((data) => {
       data.forEach((item) => {
-        let retornoCategorias: ICategoria = item.payload.toJSON()! as ICategoria;
-        let chave: string = item.key!;
+        let retornoCategorias: ICategoria = item as ICategoria;
+        //let chave: string = item.key!;
+        this.categorias.push(retornoCategorias.nomeCategoria);
       });
     });
   }
@@ -68,7 +70,7 @@ export class TransacaoComponent implements OnInit {
   }
 
   subimtForm() {
-    this.dadosEnviados.emit(this.transacoes.value);
+    this.dadosEnviados.emit(this.transacoes.value as ITransacao);
     this.transacoes.patchValue({valor: '', descricao: ''});
   }
 }

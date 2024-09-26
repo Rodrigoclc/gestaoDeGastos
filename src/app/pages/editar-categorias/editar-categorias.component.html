@@ -19,12 +19,12 @@
 
             <ul style="margin-bottom: 1.5rem;background-color: #f7f9fa;border-radius: 1rem;padding: .25rem;" class="nav nav-justified">
                 <li class="nav-item">
-                    <a [class.corBotao]="corBotao" class="nav-link active" (click)="mudarRendaDespesa('renda')">
+                    <a [class.corBotao]="corBotao" class="nav-link active" (click)="mudarRendaDespesa('renda')" style="cursor: pointer;">
                         Renda
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a [class.corBotao]="!corBotao" class="nav-link" (click)="mudarRendaDespesa('despesa')">
+                    <a [class.corBotao]="!corBotao" class="nav-link" (click)="mudarRendaDespesa('despesa')" style="cursor: pointer;">
                         Despesa
                     </a>
                 </li>
@@ -68,10 +68,10 @@
                                             [attr.data-bs-target]="'#collapseOne'+$index" aria-expanded="false"
                                             aria-controls="collapseOne">
                                             {{ item }}
-                                            <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
+                                            <!-- <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
                                                 aria-hidden="true"></i>
                                             <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
-                                                aria-hidden="true"></i>
+                                                aria-hidden="true"></i> -->
                                         </button>
                                     </h5>
                                     <div [id]="'collapseOne'+$index" class="accordion-collapse collapse"

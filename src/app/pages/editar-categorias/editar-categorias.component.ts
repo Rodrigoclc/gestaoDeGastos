@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CategoriasService } from '../../services/categorias.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CategoriaService } from '../../services/categoria.service';
 
 @Component({
   selector: 'app-editar-categorias',
@@ -16,43 +16,49 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class EditarCategoriasComponent implements OnInit {
 
-  categoriasRenda: string[] = [];
-  categoriasDespesa: string[] = [];
   listaCategorias: string[] = [];
   inputCategoria: string = '';
   rendaDespesa!: string;
   corBotao: boolean = true;
 
-  constructor(private categoriasService: CategoriasService) { }
+  constructor(private categoriaService: CategoriaService) { }
 
   ngOnInit(): void {
-    this.categoriasRenda = this.categoriasService.buscarCategoriasRenda();
-    this.categoriasDespesa = this.categoriasService.buscarCategoriasDespesa();
-    this.listaCategorias = this.categoriasRenda;
     this.rendaDespesa = 'renda';
+    this.listaCategorias = this.buscarCategoriasRenda(this.rendaDespesa);
+    console.log(this.listaCategorias);
+  }
+
+  buscarCategoriasRenda(rendaDespesa: string): string[] {
+    const categorias: string[] = [];
+    this.categoriaService.getAllCategorias(rendaDespesa).subscribe((data) => {
+      data.forEach((item) => {
+        categorias.push(item.nomeCategoria);
+      })
+    })
+    return categorias;
   }
 
   excluirCategoria(categoria: string) {
-    this.categoriasService.excluirCategoria(this.rendaDespesa, categoria);
+    // this.categoriasService.excluirCategoria(this.rendaDespesa, categoria);
   }
 
   editarCategoria(categoria: string) {
-    this.categoriasService.editarCategorias(this.rendaDespesa, categoria, this.inputCategoria);
-    this.inputCategoria = '';
+    // this.categoriasService.editarCategorias(this.rendaDespesa, categoria, this.inputCategoria);
+    // this.inputCategoria = '';
   }
 
   criarCategoria() {
-    this.categoriasService.adicionarCategoria(this.rendaDespesa, this.inputCategoria);
-    this.inputCategoria = '';
+    // this.categoriasService.adicionarCategoria(this.rendaDespesa, this.inputCategoria);
+    // this.inputCategoria = '';
   }
 
   mudarRendaDespesa(rendaDespesa: string) {
     this.rendaDespesa = rendaDespesa;
+    this.listaCategorias = this.buscarCategoriasRenda(this.rendaDespesa);
     if(rendaDespesa === 'renda') {
-      this.listaCategorias = this.categoriasRenda;
       this.corBotao = true;
     } else {
-      this.listaCategorias = this.categoriasDespesa;
       this.corBotao = false;
     }
   }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,11 +8,17 @@ import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/datab
 export class CategoriaService {
 
   categoriasRef!: AngularFireList<any>
+  userUid!: string;
+  categorias!: Observable<any[]>;
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase) {
+    this.userUid = localStorage.getItem('userUid')!;
+  }
 
-  getAllCategorias(tipo: string) {
-    return this.db.list('categorias', ref => ref.orderByChild('tipo').equalTo(tipo));
+
+  getAllCategorias(tipo: string) {    
+    this.categorias = this.db.list(`categorias/${this.userUid.replace(/"/g, "")}`, ref => ref.orderByChild('tipo').equalTo(tipo)).valueChanges() as Observable<any[]>;
+    return this.categorias;
   }
 
   // getTransacao(dbPath: string, chave: string) {

@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { TransacaoComponent } from '../../shared/components/transacao/transacao.component';
 import { Projeto, Transacao } from '../../interfaces/iProjeto';
 import { CreatePojectService } from '../../services/projetos.service';
-import { CategoriasService } from '../../services/categorias.service';
 import { CrudService } from '../../services/crud.service';
+import { ITransacao, IUltimoProjeto } from '../../interfaces/IDbInterface';
+import { ProjetoService } from '../../services/projeto.service';
 
 @Component({
   selector: 'app-adicionar-despesa',
@@ -23,21 +24,25 @@ export class AdicionarDespesaComponent implements OnInit {
   categoria: string = 'despesa';
 
   constructor(
-    private projetosService: CreatePojectService, 
-    private categorias: CategoriasService,
+    private projetoService: ProjetoService,
     private crudService: CrudService
   ) { }
 
   ngOnInit(): void {
-    // this.ultimoProjeto = this.projetosService.buscarUltimoProjetoSelecionado();
-    // this.listaProjetos = this.projetosService.recuperarProjetos();
-    //his.listaCategorias = this.categorias.buscarCategoriasDespesa();
+    this.getUltimoProjetoSelecionado();
   }
 
-  receberDados(dados: Transacao) {
-    this.crudService.adicionarTransacao('despesa', dados);
+  getUltimoProjetoSelecionado():void {
+    this.projetoService.getUltimoProjetoSelecionado().subscribe((data) => {
+      data.forEach((item) => {
+        let retornoProjetos: IUltimoProjeto = item as IUltimoProjeto;
+        this.ultimoProjeto = retornoProjetos.ultimoProjeto;        
+      });
+    });
+  }
 
-    // this.listaProjetos.find(objeto => objeto.nome == this.ultimoProjeto)!.adicionarDespesa(dados);
-    // localStorage.setItem('projetos', JSON.stringify(this.listaProjetos));
+  receberDados(dados: ITransacao) {
+    dados.tipo = 'despesa';
+    this.crudService.adicionarTransacao(dados);
   }
 }

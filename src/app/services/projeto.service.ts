@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
-import { IProjeto, IUltimoProjeto } from '../interfaces/IDbInterface';
+import { IProjeto, IUltimoProjeto, UltimoProjeto } from '../interfaces/IDbInterface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjetoService {
 
-  projetosRef!: AngularFireList<any>
+  projetosRef!: AngularFireList<any>;
+  userUid!: string;
+  projetos!: Observable<any[]>;
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase) {
+    this.userUid = localStorage.getItem('userUid')!;
+  }
 
   getAllProjetos() {
-    this.projetosRef = this.db.list('projetos');
-    return this.projetosRef;
+    this.projetos = this.db.list(`projetos/${this.userUid.replace(/"/g, "")}`).valueChanges() as Observable<any[]>;
+    return this.projetos;
   }
 
   getUltimoProjetoSelecionado() {
-    this.projetosRef = this.db.list('ultimoProjeto');
-    return this.projetosRef;
+    this.projetos = this.db.list(`ultimoProjeto/${this.userUid.replace(/"/g, "")}`).valueChanges() as Observable<any[]>;
+    return this.projetos;
   }
 
   atualizarRegistroDoUltomoProjetoSelecionado(chave: string, ultimoProjeto: IUltimoProjeto) {
-    this.projetosRef = this.db.list('ultimoProjeto');
+    this.projetosRef = this.db.list(`ultimoProjeto/${this.userUid.replace(/"/g, "")}`);
     this.projetosRef.update(chave, ultimoProjeto);
   }
 

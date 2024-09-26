@@ -4,6 +4,8 @@ import { Projeto } from '../../interfaces/iProjeto';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { RouterLink } from '@angular/router';
+import { ProjetoService } from '../../services/projeto.service';
+import { IProjeto } from '../../interfaces/IDbInterface';
 
 @Component({
   selector: 'app-editar-projetos',
@@ -18,18 +20,30 @@ import { RouterLink } from '@angular/router';
   styleUrl: './editar-projetos.component.css'
 })
 export class EditarProjetosComponent {
-  listaProjetos!: Projeto[];
+  listaProjetos!: IProjeto[];
   novoProjeto!: string;
   saldoInicialProjeto!: number;
   projetoSelecionado!: Projeto;
 
-  // constructor(
-  //   private projetosSevices: CreatePojectService,
-  //   private formBuilder: FormBuilder) { }
+  constructor(
+    private projetoService: ProjetoService,
+  ) { }
 
-  // ngOnInit(): void {
-  //   this.listaProjetos = this.projetosSevices.recuperarProjetos();
-  // }
+  ngOnInit(): void {
+    this.listaProjetos = this.recuperarProjetos();
+    console.log(this.listaProjetos);
+  }
+
+  recuperarProjetos(): IProjeto[] {
+    const listaProjetos: IProjeto[] = [];
+    this.projetoService.getAllProjetos().subscribe((data) => {
+      data.forEach((item) => {
+        listaProjetos.push(item);
+      })
+      
+    });
+    return listaProjetos;
+  }
 
   selecionar(): void {
   //   localStorage.setItem('ultimoProjeto', this.projetoSelecionado.nome);
@@ -48,7 +62,7 @@ export class EditarProjetosComponent {
 
   chamarColapso(index: number, criarEditar: boolean): void {
     if(criarEditar) {
-      this.novoProjeto = this.listaProjetos[index].nome;
+      this.novoProjeto = this.listaProjetos[index].nomeProjeto;
       this.saldoInicialProjeto = this.listaProjetos[index].saldoInicial;
     } else {
       this.novoProjeto = '';

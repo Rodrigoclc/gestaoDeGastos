@@ -5,14 +5,16 @@
         <app-header></app-header>
         <div class="card card-body mt-4">
             <div class="row mt-4">
-                <div class="form-group">
-                    <label for="example-search-input" class="form-control-label">&nbsp;</label>
-                    <select class="form-control" [(ngModel)]="opcaoSelecionada" (change)="salvarProjetoSelecionado()">
-                        @for (opcao of primeirosOptions; track opcao) {
-                        <option [value]="opcao.nomeProjeto">{{ opcao.nomeProjeto }}</option>
-                        }
-                    </select>
-                </div>
+                <form [formGroup]="selectForm">
+                    <div class="form-group">
+                        <label for="example-search-input" class="form-control-label">&nbsp;</label>
+                        <select formControlName="meuSelect" class="form-control" (change)="salvarProjetoSelecionado()">
+                            @for (opcao of primeirosOptions; track opcao) {
+                            <option [value]="opcao.nomeProjeto">{{ opcao.nomeProjeto }}</option>
+                            }
+                        </select>
+                    </div>
+                </form>
             </div>
             <p class="row mt-4">
                 <button class="btn btn-primary" style="height: 3rem;" type="button" data-bs-toggle="collapse"
@@ -36,12 +38,12 @@
         <div class="card card-body mt-4">
 
             <ul style="margin-bottom: 1.5rem;background-color: #f7f9fa;border-radius: 1rem;padding: .25rem;" class="nav nav-justified">
-                <li class="nav-item">
+                <li class="nav-item" style="cursor: pointer;">
                     <a [class.corBotao]="corBotao" (click)="mostrarValoresPorCategoria('renda')" class="nav-link active" >
                         Renda
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" style="cursor: pointer;">
                     <a [class.corBotao]="!corBotao" (click)="mostrarValoresPorCategoria('despesa')" class="nav-link" >
                         Despesa
                     </a>
@@ -104,6 +106,7 @@
                     <div>{{ saldoFinal }}</div>
                 </div>
             </div>
+            <button type="button" (click)="projetosDefault()">projetosDefault</button>
         </div>
     </div>
 </div>

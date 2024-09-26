@@ -56,12 +56,12 @@
                                         type="button" data-bs-toggle="collapse"
                                         [attr.data-bs-target]="'#collapseOne'+$index" aria-expanded="false"
                                         aria-controls="collapseOne">
-                                        <h6 class="mb-0 text-xs">{{ item.nome }}</h6>
-                                    <p class="text-xs text-secondary mb-0">{{ item.calcularSaldoAtual() }}</p>
-                                        <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
-                                            aria-hidden="true"></i>
-                                        <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
-                                            aria-hidden="true"></i>
+                                        <h6 class="mb-0 text-xs">{{ item.nomeProjeto }}</h6>
+                                    <p class="text-xs text-secondary mb-0">{{ item.saldoInicial }}</p>
+                                        <!-- <i class="collapse-close fa fa-plus text-xs pt-1 position-absolute end-0 me-3"
+                                            aria-hidden="true"></i> -->
+                                        <!-- <i class="collapse-open fa fa-minus text-xs pt-1 position-absolute end-0 me-3"
+                                            aria-hidden="true"></i> -->
                                     </button>
                                 </h5>
                                 <div [id]="'collapseOne'+$index" class="accordion-collapse collapse"

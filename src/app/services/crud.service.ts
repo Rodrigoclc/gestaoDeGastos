@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList, PathReference } from '@angular/fire/compat/database';
 import { Transacao } from '../interfaces/iProjeto';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { ITransacao } from '../interfaces/IDbInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +10,16 @@ import { map } from 'rxjs';
 export class CrudService {
 
   transacoesRef!: AngularFireList<any>
+  userUid!: string;
+  transacoes!: Observable<any[]>;
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase) {
+    this.userUid = localStorage.getItem('userUid')!;
+  }
 
   getAllTransacoes() {
-    this.transacoesRef = this.db.list('transacoes');
-    return this.transacoesRef;
+    this.transacoes = this.db.list(`transacoes/${this.userUid.replace(/"/g, "")}`).valueChanges() as Observable<any[]>;
+    return this.transacoes;
   }
 
   // getTransacao(dbPath: string, chave: string) {
@@ -22,8 +27,8 @@ export class CrudService {
   //   return this.db.object(`${dbPath}/${chave}`);
   // }
 
-  adicionarTransacao(dbPath: string, transacao: Transacao) {
-  this.transacoesRef = this.db.list(dbPath);
+  adicionarTransacao(transacao: ITransacao) {
+    this.transacoesRef = this.db.list(`transacoes/${this.userUid.replace(/"/g, "")}`);
     this.transacoesRef.push(transacao);
   }
 
