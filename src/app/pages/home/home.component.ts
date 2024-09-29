@@ -62,13 +62,15 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.obterNomesDosProjetos();
     this.obterTransacoesRendaOuDespesa();
+    this.mostrarValoresPorCategoria('renda');
+    //this.manipularValores();
   }
 
   obterUltimoProjetoSelecionado() {
 
-    this.projetoService.getUltimoProjetoSelecionado().subscribe((data) => {
+    this.projetoService.getUltimoProjetoSelecionado().snapshotChanges().subscribe((data) => {
       data.forEach((item) => {
-        let retornoProjetos: IUltimoProjeto = item as IUltimoProjeto;
+        let retornoProjetos: IUltimoProjeto = item.payload.toJSON() as IUltimoProjeto;
         let chave: string = item.key!;
         const ultimoProjeto: UltimoProjeto = {
           idUsuario: chave,
@@ -76,6 +78,7 @@ export class HomeComponent implements OnInit {
         }
 
         this.ultimoProjetoSelecionado = ultimoProjeto;
+        console.log(chave);
         this.selectForm.get('meuSelect')!.setValue(retornoProjetos.ultimoProjeto)
       });
     });
@@ -84,21 +87,24 @@ export class HomeComponent implements OnInit {
   obterNomesDosProjetos() {
     let listaOptions: IProjeto[] = [];
     this.projetoService.getAllProjetos().subscribe((data) => {
+
       data.forEach((item) => {
         let retornoProjetos: IProjeto = item as IProjeto;
         let chave: string = item.key!;
-
         listaOptions.push(retornoProjetos);
-
       });
+      
     });
 
     this.primeirosOptions = listaOptions;
   }
 
   salvarProjetoSelecionado() {
+    console.log(this.ultimoProjetoSelecionado.idUsuario);
     this.selectForm.get('meuSelect')!.valueChanges.subscribe((valorSelecionado) => {
+      
       this.ultimoProjetoSelecionado.ultimoProjeto.ultimoProjeto = valorSelecionado;
+      console.log(this.ultimoProjetoSelecionado)
       this.projetoService.atualizarRegistroDoUltomoProjetoSelecionado(this.ultimoProjetoSelecionado.idUsuario, this.ultimoProjetoSelecionado.ultimoProjeto);
     });
   }
@@ -133,47 +139,58 @@ export class HomeComponent implements OnInit {
       hora: ''
     }
     const lista: ITransacao[] = [];
+    let despesas = 0;
+    let rendas = 0;
     this.crudService.getAllTransacoes().subscribe((data) => {
-
       data.forEach((item) => {
-
         let transacoes: ITransacao = item as ITransacao;
         let chave: string = item.key!
+        
+        if (item.tipo == 'renda') {
+          rendas += item.valor;
+        } else {
+          despesas += item.valor;
+        }
+        
 
-        transacao.id = chave,
-          transacao.valor = transacoes.valor,
-          transacao.categoria = transacoes.categoria,
-          transacao.descricao = transacoes.descricao,
-          transacao.data = transacoes.data,
-          transacao.hora = transacoes.hora,
-          transacao.tipo = transacoes.tipo
         lista.push(transacoes);
 
       });
+      this.renda = rendas;
+      this.despesa = despesas;
+      this.saldoFinal = this.renda - this.despesa;
     });
     this.listaTransacoes = lista;
-    let despesas = 0;
-    let rendas = 0;
-    console.log(this.listaTransacoes);
-    for(let item of this.listaTransacoes) {
-      console.log(item);
-    }
-    this.listaTransacoes.forEach((item) => {
-      console.log(item);
-      if (item.tipo == 'renda') {
-        rendas += item.valor;
-        console.log("renda:",item);
-      } else {
-        console.log("despesa",item);
-        despesas += item.valor;
-      }
-    });
-
-    this.renda = rendas;
-    this.despesa = despesas;
-    this.saldoFinal = this.renda - this.despesa;
     this.selectForm.get('meuSelect')!.valueChanges.subscribe((valorSelecionado) => {
       this.saldoInicial = (this.primeirosOptions.find((x) => x.nomeProjeto == valorSelecionado)!.saldoInicial);
     });
+    
   }
+
+  // manipularValores(): void {
+  //   let despesas = 0;
+  //   let rendas = 0;
+  //   console.log(this.listaTransacoes[0]);
+  //   console.log(this.primeirosOptions[0]);
+  //   for(let item of this.listaTransacoes) {
+  //     console.log(item);
+  //   }
+  //   this.listaTransacoes.forEach((item) => {
+  //     console.log(item);
+  //     if (item.tipo == 'renda') {
+  //       rendas += item.valor;
+  //       console.log("renda:",item);
+  //     } else {
+  //       console.log("despesa",item);
+  //       despesas += item.valor;
+  //     }
+  //   });
+
+  //   this.renda = rendas;
+  //   this.despesa = despesas;
+  //   this.saldoFinal = this.renda - this.despesa;
+  //   this.selectForm.get('meuSelect')!.valueChanges.subscribe((valorSelecionado) => {
+  //     this.saldoInicial = (this.primeirosOptions.find((x) => x.nomeProjeto == valorSelecionado)!.saldoInicial);
+  //   });
+  // }
 }

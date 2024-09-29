@@ -32,9 +32,9 @@ export class AdicionarDespesaComponent implements OnInit {
   }
 
   getUltimoProjetoSelecionado():void {
-    this.projetoService.getUltimoProjetoSelecionado().subscribe((data) => {
+    this.projetoService.getUltimoProjetoSelecionado().snapshotChanges().subscribe((data) => {
       data.forEach((item) => {
-        let retornoProjetos: IUltimoProjeto = item as IUltimoProjeto;
+        let retornoProjetos: IUltimoProjeto = item.payload.toJSON() as IUltimoProjeto;
         this.ultimoProjeto = retornoProjetos.ultimoProjeto;        
       });
     });

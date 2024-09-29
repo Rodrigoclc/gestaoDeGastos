@@ -19,7 +19,7 @@ export class AdicionarRendaComponent {
   listaProjetos!: Projeto[];
   ultimoProjeto!: string;
   Categoria: string = 'renda';
-
+  idProjeto!: string;
   tituloHeader: string = 'Adicionar renda';
 
   constructor(
@@ -32,10 +32,10 @@ export class AdicionarRendaComponent {
   }
 
   getUltimoProjetoSelecionado():void {
-    this.projetoService.getUltimoProjetoSelecionado().subscribe((data) => {
+    this.projetoService.getUltimoProjetoSelecionado().snapshotChanges().subscribe((data) => {
       data.forEach((item) => {
-        let retornoProjetos: IUltimoProjeto = item as IUltimoProjeto;
-        this.ultimoProjeto = retornoProjetos.ultimoProjeto;        
+        let retornoProjetos: IUltimoProjeto = item.payload.toJSON() as IUltimoProjeto;
+        this.ultimoProjeto = retornoProjetos.ultimoProjeto;
       });
     });
   }

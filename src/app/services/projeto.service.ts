@@ -16,17 +16,22 @@ export class ProjetoService {
     this.userUid = localStorage.getItem('userUid')!;
   }
 
+  getProjetoPorNome(nomeProjeto: string) {
+    this.projetos = this.db.list(`projetos/${this.userUid.replace(/"/g, "")}`, ref => ref.orderByChild('nomeProjeto').equalTo(nomeProjeto)).valueChanges() as Observable<any[]>;
+  }
+
   getAllProjetos() {
     this.projetos = this.db.list(`projetos/${this.userUid.replace(/"/g, "")}`).valueChanges() as Observable<any[]>;
     return this.projetos;
   }
 
   getUltimoProjetoSelecionado() {
-    this.projetos = this.db.list(`ultimoProjeto/${this.userUid.replace(/"/g, "")}`).valueChanges() as Observable<any[]>;
-    return this.projetos;
+    this.projetosRef = this.db.list(`ultimoProjeto/${this.userUid.replace(/"/g, "")}`)
+    return this.projetosRef;
   }
 
   atualizarRegistroDoUltomoProjetoSelecionado(chave: string, ultimoProjeto: IUltimoProjeto) {
+    console.log(chave, ultimoProjeto);
     this.projetosRef = this.db.list(`ultimoProjeto/${this.userUid.replace(/"/g, "")}`);
     this.projetosRef.update(chave, ultimoProjeto);
   }

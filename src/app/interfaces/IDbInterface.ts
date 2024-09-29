@@ -28,6 +28,7 @@ export interface IUsuario {
 }
 
 export interface IUltimoProjeto {
+    idProjeto: string,
     ultimoProjeto: string
 }
 
