@@ -40,14 +40,13 @@ export class AdicionarRendaComponent {
           idUltimoProjeto: chave,
           ultimoProjeto: retornoUltimoProjeto
         }
-        console.log('ultimo',ultimoProjeto);
         this.ultimoProjeto = ultimoProjeto;
       });
     });
   }
 
   receberDados(dados: ITransacao) {
-    //dados.idProjeto = this.ultimoProjeto
+    dados.idProjeto = this.ultimoProjeto.ultimoProjeto.idProjeto;
     dados.tipo = 'renda';
     this.crudService.adicionarTransacao(dados);
   }

@@ -31,7 +31,6 @@ export class ProjetoService {
   }
 
   atualizarRegistroDoUltomoProjetoSelecionado(chave: string, ultimoProjeto: IUltimoProjeto) {
-    console.log(ultimoProjeto);
     this.projetosRef = this.db.list(`ultimoProjeto/${this.userUid.replace(/"/g, "")}`);
     this.projetosRef.update(chave, ultimoProjeto);
   }

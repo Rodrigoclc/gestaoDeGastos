@@ -97,7 +97,6 @@ export class HomeComponent implements OnInit {
           ativo: retornoProjetos.ativo
         }
         listaOptions.push(objeto);
-        console.log(listaOptions)
       });
       
     });
