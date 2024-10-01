@@ -22,6 +22,13 @@ export interface IProjeto {
     ativo: boolean;
 }
 
+export interface Projeto {
+    idProjeto: string,
+    nomeProjeto: string;
+    saldoInicial: number;
+    ativo: boolean;
+}
+
 export interface IUsuario {
     nomeUsuario: string;
     fotoUsuario: string;
@@ -33,6 +40,6 @@ export interface IUltimoProjeto {
 }
 
 export interface UltimoProjeto {
-    idUsuario: string;
+    idUltimoProjeto: string;
     ultimoProjeto: IUltimoProjeto
 }

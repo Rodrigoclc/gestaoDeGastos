@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../material/material.module';
-import { Projeto, RetornoTransacao, Transacao } from '../../interfaces/iProjeto';
+import { Transacao } from '../../interfaces/iProjeto';
 import { ITransacao } from '../../interfaces/ITransacaoInterface'
 import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
 import { RendaDespesaComponent } from '../../shared/components/renda-despesa/renda-despesa.component';
 import { CrudService } from '../../services/crud.service';
 import { ProjetoService } from '../../services/projeto.service';
-import { IProjeto, IUltimoProjeto, UltimoProjeto } from '../../interfaces/IDbInterface';
+import { IProjeto, IUltimoProjeto, Projeto, UltimoProjeto } from '../../interfaces/IDbInterface';
 import { ConfiguracoesIniciaisService } from '../../services/configuracoes-iniciais.service';
 
 
@@ -33,7 +33,7 @@ import { ConfiguracoesIniciaisService } from '../../services/configuracoes-inici
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  primeirosOptions!: IProjeto[];
+  primeirosOptions!: Projeto[];
   despesaRenda: string = 'Despesa';
   saldoInicial!: number;
   renda!: number;
@@ -73,25 +73,31 @@ export class HomeComponent implements OnInit {
         let retornoProjetos: IUltimoProjeto = item.payload.toJSON() as IUltimoProjeto;
         let chave: string = item.key!;
         const ultimoProjeto: UltimoProjeto = {
-          idUsuario: chave,
+          idUltimoProjeto: chave,
           ultimoProjeto: retornoProjetos
         }
 
         this.ultimoProjetoSelecionado = ultimoProjeto;
-        console.log(chave);
         this.selectForm.get('meuSelect')!.setValue(retornoProjetos.ultimoProjeto)
       });
     });
   }
 
   obterNomesDosProjetos() {
-    let listaOptions: IProjeto[] = [];
-    this.projetoService.getAllProjetos().subscribe((data) => {
+    let listaOptions: Projeto[] = [];
+    this.projetoService.getAllProjetos().snapshotChanges().subscribe((data) => {
 
       data.forEach((item) => {
-        let retornoProjetos: IProjeto = item as IProjeto;
+        let retornoProjetos: IProjeto = item.payload.toJSON() as IProjeto;
         let chave: string = item.key!;
-        listaOptions.push(retornoProjetos);
+        const objeto: Projeto = {
+          idProjeto: chave,
+          nomeProjeto: retornoProjetos.nomeProjeto,
+          saldoInicial: retornoProjetos.saldoInicial,
+          ativo: retornoProjetos.ativo
+        }
+        listaOptions.push(objeto);
+        console.log(listaOptions)
       });
       
     });
@@ -100,13 +106,14 @@ export class HomeComponent implements OnInit {
   }
 
   salvarProjetoSelecionado() {
-    console.log(this.ultimoProjetoSelecionado.idUsuario);
-    this.selectForm.get('meuSelect')!.valueChanges.subscribe((valorSelecionado) => {
-      
-      this.ultimoProjetoSelecionado.ultimoProjeto.ultimoProjeto = valorSelecionado;
-      console.log(this.ultimoProjetoSelecionado)
-      this.projetoService.atualizarRegistroDoUltomoProjetoSelecionado(this.ultimoProjetoSelecionado.idUsuario, this.ultimoProjetoSelecionado.ultimoProjeto);
-    });
+    const idProjeto = this.primeirosOptions.find(x => x.nomeProjeto == this.selectForm.get('meuSelect')!.value)!.idProjeto;
+    const ultimoProjeto = this.selectForm.get('meuSelect')!.value;
+
+    this.ultimoProjetoSelecionado.ultimoProjeto.idProjeto = idProjeto;
+    this.ultimoProjetoSelecionado.ultimoProjeto.ultimoProjeto = ultimoProjeto;
+
+    this.projetoService.atualizarRegistroDoUltomoProjetoSelecionado(this.ultimoProjetoSelecionado.idUltimoProjeto, this.ultimoProjetoSelecionado.ultimoProjeto);
+    this.obterUltimoProjetoSelecionado();
   }
 
   mostrarValoresPorCategoria(rendaDespesa: string) {

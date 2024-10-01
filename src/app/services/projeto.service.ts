@@ -21,8 +21,8 @@ export class ProjetoService {
   }
 
   getAllProjetos() {
-    this.projetos = this.db.list(`projetos/${this.userUid.replace(/"/g, "")}`).valueChanges() as Observable<any[]>;
-    return this.projetos;
+    this.projetosRef = this.db.list(`projetos/${this.userUid.replace(/"/g, "")}`);
+    return this.projetosRef;
   }
 
   getUltimoProjetoSelecionado() {
@@ -31,7 +31,7 @@ export class ProjetoService {
   }
 
   atualizarRegistroDoUltomoProjetoSelecionado(chave: string, ultimoProjeto: IUltimoProjeto) {
-    console.log(chave, ultimoProjeto);
+    console.log(ultimoProjeto);
     this.projetosRef = this.db.list(`ultimoProjeto/${this.userUid.replace(/"/g, "")}`);
     this.projetosRef.update(chave, ultimoProjeto);
   }

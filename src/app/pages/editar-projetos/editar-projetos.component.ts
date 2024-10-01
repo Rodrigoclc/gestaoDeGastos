@@ -35,9 +35,10 @@ export class EditarProjetosComponent {
 
   recuperarProjetos(): IProjeto[] {
     const listaProjetos: IProjeto[] = [];
-    this.projetoService.getAllProjetos().subscribe((data) => {
+    this.projetoService.getAllProjetos().snapshotChanges().subscribe((data) => {
       data.forEach((item) => {
-        listaProjetos.push(item);
+        let retornoProjetos: IProjeto = item.payload.toJSON() as IProjeto;
+        listaProjetos.push(retornoProjetos);
       })
       
     });
